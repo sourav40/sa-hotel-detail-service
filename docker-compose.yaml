@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  hotel-detail-db:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+        - 27017:27017
+    volumes:
+        - mongodb_data_container:/data/db
+    restart: always
+  minio:
+    image: 'bitnami/minio:latest'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=password
+    volumes:
+      - minio_data_container:/data
+  hotel-redis:
+    image: redis
+    ports:
+      - '6379:6379'
+    environment:
+        - REDIS_REPLICATION_MODE=master
+        - REDIS_PASSWORD=my_master_password
+    volumes:
+        - redis_data_container:/redis/data
+
+volumes:
+  mongodb_data_container:
+  minio_data_container:
+  redis_data_container:
